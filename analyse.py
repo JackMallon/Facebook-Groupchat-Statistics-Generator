@@ -1,44 +1,124 @@
 import re, numpy as np, pandas as pd
-from collections import Counter 
+from collections import Counter
+import matplotlib.pyplot as plt
+import datetime
 
+#Import chat spreadsheet
 chat = pd.read_csv('chat.csv')
+#Convert date column to datetime format
+chat['Date']= pd.to_datetime(chat['Date']) 
+firstYearOfChat = chat.head(1).Date.dt.year
 
-#Number of messages
-numberOfMessages = len(chat)
-numberOfMessages = '{:,}'.format(numberOfMessages)
-print("\n")
-print("Total number of messages: ")
-print(str(numberOfMessages))
+#Global variables
+bigString = ""
+names = chat.Name.unique()
+ 
+def totalMessages():
+    global chat
+    print("\n")
+    print("Total number of messages:")
+    print(len(chat.index))
 
-#Number of messages per person
-print("\n")
-print("Total number of messages per individual:")
-print(chat.groupby('Name').size())
+#Get the number of messages per person 
+def numberOfMessages():
+    global chat
+    print("\n")
+    print("Total number of messages per individual:")
+    print(chat.groupby('Name').size())
+
+#Get the total number of words in the chat
+def numberOfWords():
+    global chat, bigString
+    for index, row in chat.iterrows():
+         bigString = bigString + " " + str(row['Message'])
+    print("\n")
+    print("Number of words:")
+    print(str(len(bigString.split())))
+    print("294,979")
+
+#Get the most occuring words
+def mostOccuringWords():
+    global chat, bigString
+    split_it = bigString.split() 
+    numWords = len(split_it)
+    Counter = Counter(split_it) 
+    most_occur = Counter.most_common(20)
+    print(most_occur) 
+
+#Get largest message
+def getBiggestMessage():
+    global chat
+    indexOfLargestMessage = 0
+    largestMessage = ""
+    for index, row in chat.iterrows():
+         if len(str(row['Message'])) > len(largestMessage):
+            largestMessage = row['Message']
+            indexOfLargestMessage = index
+    print("\n")
+    print("Largest Message: " + str(largestMessage))
+    print("Index: " + str(indexOfLargestMessage))
+    print(str(len(str(largestMessage))))
+
+#Overall group activity
+def getGroupActivityPerYear():
+    global names,firstYearOfChat
+    now = datetime.datetime.now()
+    year = int(firstYearOfChat) 
+    currentYear = now.year
+    numMessages = []
+    years = []
+    while year < currentYear:
+        numMessages.append(len(chat[(chat['Date'].dt.year==year)]))
+        years.append(year)
+        year += 1
+        plt.plot(years, numMessages)
+    plt.xlabel('Years')
+    plt.ylabel('Number of messages')
+    plt.title('Chat activity per year')
+
+    plt.show()
+
+#Group activity per person
+def getGroupActivityPerYearPerPerson():
+    global names,firstYearOfChat
+    now = datetime.datetime.now()
+    year = int(firstYearOfChat) 
+    currentYear = now.year
+    
+    for name in names:
+        numMessages = []
+        years = []
+        while year < currentYear:
+            numMessages.append(len(chat[(chat['Name']==name) & (chat['Date'].dt.year==year)]))
+            years.append(year)
+            year += 1
+        if(name == 'Amy Larkin' or name == 'Megan Webb'):
+            pass
+        else:
+            plt.plot(years, numMessages, label = name)
+        year = int(firstYearOfChat)
+    
+    plt.xlabel('Years')
+    plt.ylabel('Number of messages')
+    plt.title('Involvment per person')
+
+    plt.legend()
+    plt.show()
+
+#Total messages
+totalMessages()
+
+#Total number of words (print statements)
+numberOfMessages()
 
 #Total number of words
-print("\n")
-#bigString = ""
-#for index, row in chat.iterrows():
-#     bigString = bigString + " " + str(row['Message'])#Next value
-print("Total number of words: ")
-print("577,944")
+numberOfWords()
 
-#Most occuring words
-#split_it = bigString.split() 
-#numWords = len(split_it)
-#Counter = Counter(split_it) 
-#most_occur = Counter.most_common(20)
-print("\n")
-print("Top 15 most occuring words:")
-print("('I', 14,314), ('the', 14,259), ('to', 11,222), ('a', 11,206), ('you', 8,444)")
-print("('and', 7,359), ('in', 7,171), ('it', 6,779), ('of', 6,404), ('that', 6,221)")
-print("('is', 6,156), ('for', 4,909), ('so', 4,374), ('was', 4,321), ('on', 4,079)")
+#Get biggest message
+getBiggestMessage()
 
+#Get overall group activty per year
+getGroupActivityPerYear()
 
-print("\n")
-
-
-
-
-
-
+#Get group activity per person per year
+getGroupActivityPerYearPerPerson()

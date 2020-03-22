@@ -5,7 +5,7 @@ import re
 import pandas as pd
 
 numOfPages = 0
-url = "files/message_10.html"
+url = "files/message_1.html"
 page = open(url)
 soup = BeautifulSoup(page.read(), "html5lib")
 messages = []
@@ -24,6 +24,7 @@ def getNumOfPages():
 
     pages = list(dict.fromkeys(pages))
     numOfPages = int(pages[len(pages)-1])
+    print(numOfPages)
 
 def getMembers():
     global numOfPages,url,page,soup 
@@ -60,3 +61,12 @@ with open('chat.csv', 'w', newline='') as file:
     writer.writerow(["Name","Message","Date"])
     for x in range(len(messages)):
         writer.writerow([names[x],messages[x],dates[x]])
+
+#Convert the date column to date time data type
+chat = pd.read_csv('chat.csv')
+chat['Date'] = pd.to_datetime(chat.Date)
+for index, row in chat.head().iterrows():
+     print(str(row['Date']))
+
+chat.to_csv(r'chat.csv', index = False)
+
