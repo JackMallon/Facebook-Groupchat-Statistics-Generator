@@ -12,7 +12,8 @@ firstYearOfChat = chat.head(1).Date.dt.year
 #Global variables
 bigString = ""
 names = chat.Name.unique()
- 
+
+#Total messages 
 def totalMessages():
     global chat
     print("\n")

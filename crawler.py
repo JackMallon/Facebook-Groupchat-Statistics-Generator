@@ -23,7 +23,11 @@ def getNumOfPages():
             pages.append(str(link.contents[0]))
 
     pages = list(dict.fromkeys(pages))
-    numOfPages = int(pages[len(pages)-1])
+
+    if len(pages) == 0: 
+        numOfPages = 1
+    else: 
+        numOfPages = int(pages[len(pages)-1])
     print(numOfPages)
 
 def getMembers():
@@ -65,8 +69,6 @@ with open('chat.csv', 'w', newline='') as file:
 #Convert the date column to date time data type
 chat = pd.read_csv('chat.csv')
 chat['Date'] = pd.to_datetime(chat.Date)
-for index, row in chat.head().iterrows():
-     print(str(row['Date']))
 
 chat.to_csv(r'chat.csv', index = False)
 
