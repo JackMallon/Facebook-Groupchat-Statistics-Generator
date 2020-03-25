@@ -68,7 +68,7 @@ def getGroupActivityPerYear():
     currentYear = now.year
     numMessages = []
     years = []
-    while year < currentYear:
+    while year <= currentYear:
         numMessages.append(len(chat[(chat['Date'].dt.year==year)]))
         years.append(year)
         year += 1
@@ -89,7 +89,7 @@ def getGroupActivityPerYearPerPerson():
     for name in names:
         numMessages = []
         years = []
-        while year < currentYear:
+        while year <= currentYear:
             numMessages.append(len(chat[(chat['Name']==name) & (chat['Date'].dt.year==year)]))
             years.append(year)
             year += 1

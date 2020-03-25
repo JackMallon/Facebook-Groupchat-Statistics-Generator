@@ -5,10 +5,10 @@ import datetime
 import random
 import sys
 
-names = ['Jack Mallon','Daniel Kyne','Gary Robinson','ConAir Larkin','Matthew Senior Tapley']
+names = ['Jack Mallon','Ryan Brennan','Cianan Collins']
 
 #Import chat spreadsheet
-chat = pd.read_csv('ldschat.csv')
+chat = pd.read_csv('chat.csv')
 bigString = ""
 
 #Create one big string of all of the messages from one individual
@@ -36,7 +36,7 @@ def build_chain(text, chain = {}):
     return chain
 
 #Generate the message
-def generate_message(chain, count = 100):
+def generate_message(chain, count = 50):
     word1 = random.choice(list(chain.keys()))
     message = word1.capitalize()
 
@@ -58,9 +58,10 @@ def write_file(filename, message):
     with open(filename, "w") as file:
         file.write(message)
 
-name = "ConAir Larkin"
-#for name in names:
-createBigString(name)
-chain = build_chain(bigString)
-message = generate_message(chain)
-write_file(name + ".txt", message)
+
+for name in names:
+    bigString = ""
+    createBigString(name)
+    chain = build_chain(bigString)
+    message = generate_message(chain)
+    write_file(name + ".txt", message)
