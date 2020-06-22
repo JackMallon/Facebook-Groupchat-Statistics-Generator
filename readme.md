@@ -21,7 +21,7 @@ Run crawler.py before running either of the other two programs. This will genera
 
 ### Prerequisites
 
-Must have python3 and pip installed and all of the dependencies
+Must have python3 and pip installed as well as all of the dependencies
 
 ```
 pip install requests bs4 csv re pandas collections matplotlib datetime random sys
